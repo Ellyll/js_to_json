@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby 
+
 require 'rkelly'
 require 'json'
 require 'open-uri'
@@ -69,10 +71,11 @@ def get_var_data(node)
   end
 end
 
-
+abort "Usage: js_to_json.rb url|filename" if ARGV.empty?
+url = ARGV[0]
 
 # Load the javascript from website/file
-javascript = open('https://raw.githubusercontent.com/tinyspeck/glitch-GameServerJS/master/items/cheese_very_very_stinky.js').read
+javascript = open(url).read
 
 # Parse the javascript to build an Abstract Syntax Tree
 parser = RKelly::Parser.new

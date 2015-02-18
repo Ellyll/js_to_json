@@ -28,7 +28,7 @@ end
 def get_var_values(node)
   case node
     when RKelly::Nodes::StringNode
-      node.value
+      node.value.gsub(/^'/, '"').gsub(/'$/, '"')
     when RKelly::Nodes::NumberNode
       node.value
     when RKelly::Nodes::FalseNode
@@ -39,7 +39,7 @@ def get_var_values(node)
       values = node.value.map { |element| get_var_values(element.value) }
       "[ #{values.join(', ')} ]"
     when RKelly::Nodes::ObjectLiteralNode
-      values = node.value.map { |property| "\"#{property.name.gsub(/^"/, '').gsub(/"$/, '')}\": #{get_var_values(property.value)}" }
+      values = node.value.map { |property| "\"#{property.name.gsub(/^["']/, '').gsub(/["']$/, '')}\": #{get_var_values(property.value)}" }
       "{ #{values.join(', ')} }"
     when RKelly::Nodes::FunctionExprNode
       "null"

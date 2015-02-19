@@ -47,6 +47,8 @@ def get_var_values(node)
       "null"
     when RKelly::Nodes::DotAccessorNode
       "null"
+    when RKelly::Nodes::MultiplyNode
+      "null"
     else
       raise "Unknown node type #{node.class}"
   end

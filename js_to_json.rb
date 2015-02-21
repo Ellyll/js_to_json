@@ -55,6 +55,12 @@ def get_var_values(node)
       "null"
     when RKelly::Nodes::MultiplyNode
       "null"
+    when RKelly::Nodes::DivideNode
+      "null"
+    when RKelly::Nodes::AddNode
+      "null"
+    when RKelly::Nodes::SubtractNode
+      "null"
     else
       raise "Unknown node type #{node.class}"
   end

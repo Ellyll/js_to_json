@@ -31,6 +31,8 @@ def get_var_values(node)
       node.value.gsub(/^'/, '"').gsub(/'$/, '"')
     when RKelly::Nodes::NumberNode
       node.value
+    when RKelly::Nodes::UnaryMinusNode
+      -node.value.value
     when RKelly::Nodes::FalseNode
       node.value
     when RKelly::Nodes::TrueNode
@@ -39,7 +41,11 @@ def get_var_values(node)
       values = node.value.map { |element| get_var_values(element.value) }
       "[ #{values.join(', ')} ]"
     when RKelly::Nodes::ObjectLiteralNode
-      values = node.value.map { |property| "\"#{property.name.gsub(/^["']/, '').gsub(/["']$/, '')}\": #{get_var_values(property.value)}" }
+      values = node.value.map do |property|
+        name = '"' + property.name.to_s.gsub(/^["']/, '').gsub(/["']$/, '') + '"'
+        value = get_var_values(property.value)
+        "#{name}: #{value}"
+      end
       "{ #{values.join(', ')} }"
     when RKelly::Nodes::FunctionExprNode
       "null"
@@ -91,7 +97,9 @@ nodes = ast.value.select do |node|
 end
 
 # Turn each node into a ruby hash
-values = nodes.map { |node| get_var_data(node) }
+values = nodes.map do |node|
+  get_var_data(node)
+end
 
 # Merge the hashes into a single one
 merged = values.reduce({}) { |memo, value| memo.deep_merge(value) }
